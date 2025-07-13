@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bem-vindo à Matrix</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+  /* Reset básico */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: black;
+    color: #00ff00;
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* Efeito código caindo */
+  .matrix-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: black;
+  }
+
+  header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #003300;
+  }
+
+  header .logo {
+    font-size: 2.2rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    user-select: none;
+  }
+
+  nav a {
+    color: #00ff00;
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  nav a:hover {
+    color: #99ff99;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 80px auto 100px auto;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  main h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 8px #00ff00;
+  }
+
+  main p.subtitle {
+    font-size: 1.3rem;
+    font-style: italic;
+    margin-bottom: 40px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: #00ff00;
+    color: black;
+    font-weight: bold;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #00ff00;
+    transition: all 0.3s ease;
+    user-select: none;
+  }
+
+  .btn-primary:hover {
+    background: #99ff99;
+    box-shadow: 0 0 30px #99ff99;
+  }
+
+  section.about {
+    margin-top: 80px;
+    text-align: left;
+    border-top: 2px solid #003300;
+    padding-top: 40px;
+  }
+
+  section.about h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 6px #00ff00;
+  }
+
+  section.about p {
+    line-height: 1.6;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+
+  .themes {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .theme-card {
+    background: #001a00;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #004400;
+    width: 180px;
+    user-select: none;
+  }
+
+  .theme-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #004400;
+    padding-bottom: 6px;
+  }
+
+  .theme-card p {
+    font-size: 1rem;
+  }
+
+  section.resources {
+    margin-top: 80px;
+    text-align: center;
+  }
+
+  section.resources h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-shadow: 0 0 6px #00ff00;
+  }
+
+  .cards {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card {
+    background: #001a00;
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px;
+    box-shadow: 0 0 10px #004400;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .card:hover {
+    background: #003300;
+  }
+
+  .card img {
+    max-width: 100%;
+    border-radius: 6px;
+    margin-bottom: 15px;
+  }
+
+  .card h3 {
+    margin-bottom: 10px;
+  }
+
+  section.testimonials {
+    margin: 80px 0;
+    text-align: center;
+  }
+
+  section.testimonials blockquote {
+    font-size: 1.3rem;
+    font-style: italic;
+    margin: 20px auto;
+    max-width: 700px;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 40px;
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+  }
+
+  section.testimonials blockquote::before {
+    content: "“";
+    font-size: 4rem;
+    position: absolute;
+    left: 0;
+    top: -10px;
+    color: #00ff00;
+    opacity: 0.5;
+  }
+
+  footer {
+    background: #001100;
+    padding: 20px 40px;
+    text-align: center;
+    color: #004400;
+    border-top: 1px solid #003300;
+    font-size: 0.9rem;
+  }
+
+  footer a {
+    color: #00ff00;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<canvas class="matrix-bg"></canvas>
+
+<header>
+  <div class="logo">MATRIX</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#about">Sobre</a>
+    <a href="#resources">Recursos</a>
+    <a href="#contact">Contato</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Você está pronto para despertar?</h1>
+  <p class="subtitle">Descubra a verdade por trás da realidade virtual.</p>
+  <button class="btn-primary" onclick="alert('Bem-vindo à Matrix!')">Entre na Matrix</button>
+
+  <section id="about" class="about">
+    <h2>Sobre o Filme</h2>
+    <p>Matrix, dirigido pelas irmãs Wachowski, é um marco do cinema que mistura filosofia, ação e tecnologia.</p>
+    <p>O filme aborda temas como realidade virtual, escolha, liberdade e controle.</p>
+    <div class="themes">
+      <div class="theme-card">
+        <h3>Realidade Virtual</h3>
+        <p>Explora o mundo simulado que mantém a humanidade cativa.</p>
+      </div>
+      <div class="theme-card">
+        <h3>Escolha</h3>
+        <p>A liberdade de decidir entre a verdade e a ilusão.</p>
+      </div>
+      <div class="theme-card">
+        <h3>Liberdade</h3>
+        <p>A luta pela emancipação da mente e do corpo.</p>
+      </div>
+      <div class="theme-card">
+        <h3>Controle</h3>
+        <p>O poder das máquinas sobre o destino humano.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources" class="resources">
+    <h2>Recursos Exclusivos</h2>
+    <div class="cards">
+      <div class="card" onclick="alert('Download de wallpapers')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Matrix_code.png" alt="Wallpapers Matrix" />
+        <h3>Wallpapers Exclusivos</h3>
+        <p>Baixe papéis de parede incríveis inspirados na Matrix.</p>
+      </div>
+      <div class="card" onclick="alert('Assistir trailer legendado')">
+        <img src="https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg" alt="Trailer Matrix" />
+        <h3>Trailer Legendado</h3>
+        <p>Assista ao trailer oficial com legendas em português.</p>
+      </div>
+      <div class="card" onclick="alert('Faça o teste da Matrix')">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/The_Matrix_Poster.jpg/220px-The_Matrix_Poster.jpg" alt="Teste Matrix" />
+        <h3>Teste: Você está na Matrix?</h3>
+        <p>Descubra se você está vivendo na simulação.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <blockquote>“There is no spoon.”</blockquote>
+    <blockquote>“Welcome to the real world.”</blockquote>
+    <blockquote>“Unfortunately, no one can be told what the Matrix is. You have to see it for yourself.”</blockquote>
+  </section>
+</main>
+
+<footer id="contact">
+  &copy; 2025 Matrix Fan Page |  
+  <a href="#">Facebook</a> |  
+  <a href="#">Twitter</a> |  
+  <a href="#">Instagram</a>
+</footer>
+
+<script>
+  // Código simples para o efeito "Matrix" do código caindo
+
+  const canvas = document.querySelector('.matrix-bg');
+  const ctx = canvas.getContext('2d');
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+
+  canvas.width = width;
+  canvas.height = height;
+
+  const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%+-/~{[|`]}'.split('');
+
+  const fontSize = 16;
+  const columns = Math.floor(width / fontSize);
+
+  const drops = [];
+  for(let x = 0; x < columns; x++) drops[x] = Math.random() * height;
+
+  function draw() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = '#00ff00';
+    ctx.font = fontSize + 'px Share Tech Mono';
+
+    for(let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if(drops[i] * fontSize > height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 50);
+
+  // Ajusta o canvas ao redimensionar a tela
+  window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  });
+</script>
+
+</body>
+</html>

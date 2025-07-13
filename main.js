@@ -1,1 +1,0 @@
-nome = document.getElementById('nome');
