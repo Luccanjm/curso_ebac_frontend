@@ -1,31 +1,27 @@
-module.exports = function(grunt){
-    grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-        less:{
-            development:{
-                files:{
-                   'dist/css/styles.css': 'src/less/styles.less'
-                }
-            }
-        },
-        concurrent:{
-            target: ['less']
-        },
-        uglify:{
-            uglify: {
-                target:{
-                   files:{
-                    'main.min.js' : 'main.js'
-                   } 
-                }
-            }
+module.exports = function(grunt) {
+
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    less: {
+      development: {
+        files: {
+          'dist/style.css': 'src/style.less'  
         }
-    })
+      }
+    },
 
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-concurrent');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    uglify: {
+      build: {
+        files: {
+          'dist/app.min.js': ['src/app.js']  
+        }
+      }
+    }
+  });
 
-    grunt.registerTask('default', ['less', 'uglify'])
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-}
+  grunt.registerTask('default', ['less', 'uglify']);
+};
